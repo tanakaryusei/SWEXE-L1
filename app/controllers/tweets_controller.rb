@@ -1,6 +1,7 @@
 class TweetsController < ApplicationController
   def index
     @tweets=Tweet.all
+    logger.debug @tweets.count
   end
   
   def new
@@ -11,16 +12,16 @@ class TweetsController < ApplicationController
     @tweet=Tweet.new(message: params[:tweet][:message], tdate: Time.current)
     if @tweet.save
       flash[:notice]= 'ツイートに成功しました'
-      redirect_to '/'
+      redirect_to root_path #"/"
     else 
-      render 'new'
+      render new tweet_path
     end
   end
   
   def destroy
     tweet=Tweet.find(params[:id])
     tweet.destroy
-    redirect_to '/'
+    redirect_to root_path #'/'
   end
   
   def show
@@ -34,6 +35,6 @@ class TweetsController < ApplicationController
   def update
     tweet=Tweet.find(params[:id])
     tweet.update(message: params[:tweet][:message])
-    redirect_to '/'
+    redirect_to root_path #'/'
   end
 end
